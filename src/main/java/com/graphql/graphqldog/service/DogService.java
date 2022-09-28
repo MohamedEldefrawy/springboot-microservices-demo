@@ -54,7 +54,7 @@ public class DogService implements IDogService {
         var optionalDog = Optional.ofNullable(this.dogRepository.getDog(id));
         var selectedDog = optionalDog.get();
         selectedDog.setName(newDog.getName());
-        selectedDog.setBreed(newDog.getName());
+        selectedDog.setBreed(newDog.getBreed());
         selectedDog.setOrigin(newDog.getOrigin());
         this.dogRepository.save(selectedDog);
         return optionalDog.orElseThrow(() -> new DogNotFoundException("Dog not found", id));

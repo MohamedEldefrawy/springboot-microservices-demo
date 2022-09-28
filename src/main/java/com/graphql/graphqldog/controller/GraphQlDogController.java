@@ -3,11 +3,12 @@ package com.graphql.graphqldog.controller;
 import com.graphql.graphqldog.entity.Dog;
 import com.graphql.graphqldog.exception.BreedNotFoundException;
 import com.graphql.graphqldog.service.IDogService;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class GraphQlDogController {
@@ -28,7 +29,7 @@ public class GraphQlDogController {
     }
 
 
-    @QueryMapping
+    @MutationMapping
     public Boolean deleteDogBreed(String breed) {
         var dogs = this.dogService.selectDogs();
         boolean result = false;
@@ -44,11 +45,11 @@ public class GraphQlDogController {
         return true;
     }
 
-    @QueryMapping
-    public Dog updateDogName(String name, Integer dogID) {
-        Optional<Dog> optionalDog = Optional.of(this.dogService.selectDog(dogID));
-        var selectedDog = optionalDog.get();
-        selectedDog.setName(name);
-        return this.dogService.updateDog(dogID, selectedDog);
+    @MutationMapping
+    public Dog updateDogName(@Argument String newName, @Argument Integer id) {
+        var selectedDog = this.dogService.selectDog(id);
+        selectedDog.setName(newName);
+        return this.dogService.updateDog(id, selectedDog);
+
     }
 }
